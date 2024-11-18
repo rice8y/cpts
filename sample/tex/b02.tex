@@ -1,0 +1,40 @@
+\newcount\A
+\newcount\B
+\ReadStdin(\A)
+\ReadStdin(\B)
+
+\newcount\idx \idx=\A
+\newcount\tmp
+\newcount\flag \flag=0
+
+\newcount\a
+\newcount\b
+\newcount\result
+
+\def\mod#1#2#3{
+  \a=#1
+  \b=#2
+  \result=\a
+  \divide\result by \b
+  \multiply\result by \b
+  \advance\a by -\result
+  #3=\a
+}
+
+\newcount\Bplus \Bplus=\B
+\advance\Bplus by 1
+\loop\ifnum\idx<\Bplus
+  \mod{100}{\the\idx}{\tmp}
+  \ifnum\tmp=0
+    \flag=1
+    \break
+  \fi
+  \advance\idx by 1
+\repeat
+
+\ifnum\flag=1
+  \WriteStdout(Yes)
+\else
+  \WriteStdout(No)
+\fi
+\end

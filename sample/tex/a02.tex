@@ -1,0 +1,50 @@
+\def\MakeArray#1#2{
+  \expandafter\def\csname ArrayLength#1\endcsname{#2}
+  \count0=0
+  \loop
+    \expandafter\def\csname ArrayValue\the\count0#1\endcsname{0}
+    \advance\count0 by 1
+    \ifnum\count0<#2 
+  \repeat
+}
+
+\def\SetArrayValue#1#2#3{
+  \expandafter\xdef\csname ArrayValue#2#1\endcsname{#3}
+}
+
+\def\GetArrayValue#1#2#3{
+  \expandafter\let\expandafter#3\csname ArrayValue#2#1\endcsname
+}
+
+\newcount\N
+\newcount\X
+\ReadStdin(\N)
+\ReadStdin(\X)
+
+\MakeArray{A}{\N}
+
+\newcount\idx \idx=0
+\loop\ifnum\idx<\N
+  \ReadStdin(\tmp)
+  \SetArrayValue{A}{\number\idx}{\tmp}
+  \advance\idx by 1
+\repeat
+
+\newcount\flag \flag=0
+
+\idx=0
+\loop\ifnum\idx<\N
+  \GetArrayValue{A}{\number\idx}{\tmp}
+  \ifnum\tmp=\X
+    \flag=1
+    \break
+  \fi
+  \advance\idx by 1
+\repeat
+
+\ifnum\flag=1
+  \WriteStdout(Yes)
+\else
+  \WriteStdout(No)
+\fi
+\end
