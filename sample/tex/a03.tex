@@ -1,0 +1,71 @@
+\def\MakeArray#1#2{
+  \expandafter\def\csname ArrayLength#1\endcsname{#2}
+  \count0=0
+  \loop
+    \expandafter\def\csname ArrayValue\the\count0#1\endcsname{0}
+    \advance\count0 by 1
+    \ifnum\count0<#2 
+  \repeat
+}
+
+\def\SetArrayValue#1#2#3{
+  \expandafter\xdef\csname ArrayValue#2#1\endcsname{#3}
+}
+
+\def\GetArrayValue#1#2#3{
+  \expandafter\let\expandafter#3\csname ArrayValue#2#1\endcsname
+}
+
+\newcount\N
+\newcount\K
+\ReadStdin(\N)
+\ReadStdin(\K)
+
+\MakeArray{P}{\N}
+\MakeArray{Q}{\N}
+
+\newcount\tmp
+\newcount\i \i=0
+\loop\ifnum\i<\N
+  \ReadStdin(\tmp)
+  \SetArrayValue{P}{\number\i}{\tmp}
+  \advance\i by 1
+\repeat
+
+\i=0
+\loop\ifnum\i<\N
+  \ReadStdin(\tmp)
+  \SetArrayValue{Q}{\number\i}{\tmp}
+  \advance\i by 1
+\repeat
+
+\newcount\flag \flag=0
+\i=0
+\newcount\j \j=0
+\newcount\tmpP
+\newcount\tmpQ
+\newcount\tmpK
+\loop\ifnum\i<\N
+  \loop\ifnum\j<\N
+    \GetArrayValue{P}{\number\i}{\tmpP}
+    \GetArrayValue{Q}{\number\i}{\tmpQ}
+    \tmpK=\tmpP
+    \advance\tmpK by \tmpQ
+    \ifnum\tmpK=\K
+      \flag=1
+      \break
+    \fi
+    \advance\j by 1
+  \repeat
+  \ifnum\flag=1
+    \break
+  \fi
+  \advance\i by 1
+\repeat
+
+\ifnum\flag=1
+  \WriteStdout(Yes)
+\else
+  \WriteStdout(No)
+\fi
+\end
